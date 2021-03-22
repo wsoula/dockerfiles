@@ -8,7 +8,7 @@ Build using this dockerfile
 
 Create alias to use the built container
 
-`alias maze="docker run --rm -it -v $PWD:/var/tmp/maze-output maze"`
+`alias maze="docker run --rm -it -v $(PWD):/var/tmp/maze-output maze"`
 
 And use like this
 
