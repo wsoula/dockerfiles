@@ -6,23 +6,24 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
-* tmpsms - get a number temporarily for sms verification
-* nin - cli to do list
-* minesweeper - cli minesweeper game
-* maze - create mazes
-* sunny-land - 2d platform game
-* locate-route - get location of hops in traceroute
-* wifi-password - display password for wifi
-* sx-network-scan - scan network
-* nafas - breathing exercises
-* weebsay - anime quotes
-* fokus - website to do list
-* cork - hex calculator
-* booki - virtual bookshelf
-* penney - coin flip simulation game
-* segno - generate qr codes
-* onefetch - display information about github repo
-* screenfetch - display information about system architecture
-* cpufetch - display information about cpu
-* polyglot - show what programming languages are in project
+* haiti - cli tool to identify hash type of a given hash
 * httpie - http cli for the api age
+* polyglot - show what programming languages are in project
+* cpufetch - display information about cpu
+* screenfetch - display information about system architecture
+* onefetch - display information about github repo
+* segno - generate qr codes
+* penney - coin flip simulation game
+* booki - virtual bookshelf
+* cork - hex calculator
+* fokus - website to do list
+* weebsay - anime quotes
+* nafas - breathing exercises
+* sx-network-scan - scan network
+* wifi-password - display password for wifi
+* locate-route - get location of hops in traceroute
+* sunny-land - 2d platform game
+* maze - create mazes
+* minesweeper - cli minesweeper game
+* nin - cli to do list
+* tmpsms - get a number temporarily for sms verification
