@@ -27,3 +27,5 @@ Projects
 * minesweeper - cli minesweeper game
 * nin - cli to do list
 * tmpsms - get a number temporarily for sms verification
+
+Follows Conventional Commits
