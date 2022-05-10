@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0
 # Install base packages
 #RUN apk update
-RUN apt update && apt upgrade
+RUN apt update && apt upgrade -y
 #RUN apk upgrade
 #RUN apk add curl wget bash
 RUN apt-get install -y curl zip
