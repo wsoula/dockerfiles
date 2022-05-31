@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* numb - a tool for working with numbers, units, and dates
 * ascii-image-converter - convert image to ascii art
 * haiti - cli tool to identify hash type of a given hash
 * httpie - http cli for the api age
