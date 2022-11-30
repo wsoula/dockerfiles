@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* pulseq - synthesizer in browser
 * fsrx - flow state reading in the terminal
 * numb - a tool for working with numbers, units, and dates
 * ascii-image-converter - convert image to ascii art
