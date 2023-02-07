@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* seashells - host output of piped commands
 * pulseq - synthesizer in browser
 * fsrx - flow state reading in the terminal
 * numb - a tool for working with numbers, units, and dates
