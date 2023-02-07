@@ -14,4 +14,6 @@ Example usage:
 
 `./infinite_loop.py| nc 127.0.0.1 1337` or `tail -f log.log | nc 127.0.0.1 1337`
 
+`x=1; while true ; do clear ;  echo $x ; x=$((x+1)) ; sleep 1 ; done | nc 127.0.0.1 1337`
+
 And visit the resulting url
