@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* cdktf-cli - instructions on use a different repo's Dockerfile
 * seashells - host output of piped commands
 * pulseq - synthesizer in browser
 * fsrx - flow state reading in the terminal
