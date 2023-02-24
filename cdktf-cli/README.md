@@ -8,3 +8,4 @@ Steps
 * `make build`
 * add an alias - `alias cdktf-cli='docker run -it --rm -v $pwd:/src -w "/src" cdktf-cli:latest sh'`
 * init project (or any other cdktf command in existing project) - `cdktf-cli` then `cdktf init --template-python`
+* install dependencies - `pipenv install`
