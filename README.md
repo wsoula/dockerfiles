@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* fspace - show remaining space on system
 * exrex - generate example text for the given regex
 * MimicMania - text to speech and voice cloning
 * cdktf-cli - instructions on use a different repo's Dockerfile
