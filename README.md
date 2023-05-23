@@ -6,6 +6,8 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* periodicum - interactive periodic table of elements
+* linuxwave - make music from /udev/random
 * fspace - show remaining space on system
 * exrex - generate example text for the given regex
 * MimicMania - text to speech and voice cloning
