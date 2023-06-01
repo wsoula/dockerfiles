@@ -8,8 +8,4 @@ Build using this dockerfile
 
 Create alias to use the built container
 
-`alias ov="docker run --rm -it -v $(PWD):/tmp ov"`
-
-Run (present work directory will be mountaed to /tmp so have to specify that in file name passed"
-
-`ov /tmp/Dockerfile`
+`alias ov="docker run --rm -it -v $(PWD):/tmp ov Dockerfile"`
