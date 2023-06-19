@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* fractals - customizable renderer for the Madelbrot set written in Go
 * ov - feature rich terminal pager
 * fsg-pp - finally some good profile pictures
 * periodicum - interactive periodic table of elements
