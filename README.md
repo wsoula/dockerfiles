@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* mytimer - simple timer for your terminal
 * whisp-chat - encrypted messaging CLI software
 * fractals - customizable renderer for the Madelbrot set written in Go
 * ov - feature rich terminal pager
