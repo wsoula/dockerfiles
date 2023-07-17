@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* periodic-table-cli - An interactive periodical table of elements app for the console
 * mytimer - simple timer for your terminal
 * whisp-chat - encrypted messaging CLI software
 * fractals - customizable renderer for the Madelbrot set written in Go
