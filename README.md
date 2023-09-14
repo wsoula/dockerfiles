@@ -6,6 +6,7 @@ Mostly projects found at r/coolgithubprojects
 
 Projects
 ---
+* stree - tree view for s3 buckets
 * diagrams-as-code - declarative configurations using YAML for drawing cloud system architectures
 * periodic-table-cli - An interactive periodical table of elements app for the console
 * mytimer - simple timer for your terminal
