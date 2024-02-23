@@ -1,4 +1,4 @@
-diagrams-as-code
+ScoutSuite
 ---
 https://github.com/nccgroup/ScoutSuite
 
