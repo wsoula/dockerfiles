@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pyxel WASM Arcade</title>
+  <!-- Load the official Pyxel WASM runtime layer -->
+  <script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
+</head>
+<body style="background: #111; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+  <!-- Tell Pyxel to execute main.py and map the other engine dependency files -->
+  <pyxel-run
+    root="."
+    name="main.py"
+    packages="">
+  </pyxel-run>
+
+</body>
+</html>
+
