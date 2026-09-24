@@ -269,7 +269,8 @@ class ShooterEngine:
           m.hp -= b.damage
           if b in self.bullets: self.bullets.remove(b)
           if m.hp <= 0:
-            self.score += 10
+            points_earned = 10 if self.is_auto_aiming else 100
+            self.score += points_earned
             if self.score > self.high_score:  # Update high score in real-time
               self.high_score = self.score
             if m in self.monsters: self.monsters.remove(m)
