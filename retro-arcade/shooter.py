@@ -1,6 +1,8 @@
 import pyxel
 import random
 import math
+import json
+import os
 
 SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 160
@@ -45,7 +47,48 @@ class Monster:
 
 class ShooterEngine:
   def __init__(self):
+    # Setup persistent user data directory paths safely
+    self.save_dir = pyxel.user_data_dir("Arcade", "Shooter")
+    self.save_file = os.path.join(self.save_dir, "save.json")
+    self.high_score = self.load_high_score()
+
+    self.init_sprites()
     self.reset()
+
+  def load_high_score(self):
+    """Loads high score from local file storage profile folder."""
+    try:
+      if os.path.exists(self.save_file):
+        with open(self.save_file, "r") as f:
+          data = json.load(f)
+          return data.get("high_score", 0)
+    except:
+      pass
+    return 0
+
+  def save_high_score(self):
+    """Saves high score out to storage media securely."""
+    try:
+      # Ensure data container directory tree paths exist safely
+      if not os.path.exists(self.save_dir):
+        os.makedirs(self.save_dir)
+      with open(self.save_file, "w") as f:
+        json.dump({"high_score": self.high_score}, f)
+    except:
+      pass
+
+  def init_sprites(self):
+    p_data = [
+      "00999900",
+      "09914190",
+      "00914100",
+      "00121200",
+      "01212120",
+      "00033000",
+      "00300300",
+      "01100110"
+    ]
+    pyxel.images[0].set(0, 0, p_data)
 
   def reset(self):
     self.px = 80.0
@@ -149,7 +192,7 @@ class ShooterEngine:
         self.aim_dx = math.cos(angle)
         self.aim_dy = math.sin(angle)
 
-    # Clean Monster Spawning Grid Mechanics
+    # Spawning System
     if pyxel.frame_count % 30 == 0 and len(self.monsters) < 12:
       side = random.randint(0, 3)
       # Spawn precisely 4 pixels outside the visible layout frame box
@@ -173,7 +216,7 @@ class ShooterEngine:
 
       self.monsters.append(Monster(mx, my, random.randint(0, 1)))
 
-    # Shooting Mechanics (Accepts Spacebar or F key to clear select latency)
+    # Shooting mechanics (Accepts Spacebar or F key to clear select latency)
     if self.shoot_cooldown > 0:
       self.shoot_cooldown -= 1
 
@@ -190,7 +233,7 @@ class ShooterEngine:
       else:
         self.bullets.append(Bullet(self.px + 3, self.py + 3, self.aim_dx * 3.0, self.aim_dy * 3.0, gun["damage"], gun["color"]))
 
-    # Bullet Update Engine
+    # Update Bullets
     for b in self.bullets[:]:
       b.x += b.dx
       b.y += b.dy
@@ -200,7 +243,7 @@ class ShooterEngine:
       if b.lifetime <= 0 or self.get_obstacle_at(btx, bty):
         if b in self.bullets: self.bullets.remove(b)
 
-    # Monster Movement Tracking Loops
+    # Update Monsters
     for m in self.monsters[:]:
       mdx = (self.px + 4) - (m.x + 4)
       mdy = (self.py + 4) - (m.y + 4)
@@ -220,21 +263,29 @@ class ShooterEngine:
         else:
           self.cleared_spawns.add((int(math.floor(m.x/8)), int(math.floor((m.y+mvy)/8))))
 
-      # Hit detection with player projectiles
+      # Check Bullet hits
       for b in self.bullets[:]:
         if (b.x >= m.x and b.x <= m.x + 7 and b.y >= m.y and b.y <= m.y + 7):
           m.hp -= b.damage
           if b in self.bullets: self.bullets.remove(b)
           if m.hp <= 0:
             self.score += 10
+            if self.score > self.high_score:  # Update high score in real-time
+              self.high_score = self.score
             if m in self.monsters: self.monsters.remove(m)
             break
 
-      # Damage calculation against player health pools
+      # Damage calculation against player health
       if m.hp > 0 and (self.px < m.x + 8 and self.px + 8 > m.x and self.py < m.y + 8 and self.py + 8 > m.y):
         self.player_hp -= 1
         if m in self.monsters: self.monsters.remove(m)
-        if self.player_hp <= 0: self.game_over = True
+        if self.player_hp <= 0:
+          self.game_over = True
+          self.save_high_score() # Save immediately on death
+
+    # Dynamic real-time score fallback tracker
+    if self.score > self.high_score:
+      self.high_score = self.score
 
   def draw(self):
     cam_x = int(self.px - SCREEN_WIDTH / 2)
@@ -271,18 +322,29 @@ class ShooterEngine:
       pyxel.rect(int(m.x), int(m.y), m.width, m.height, m.color)
 
     # Draw Player
-    pyxel.rect(int(self.px), int(self.py), self.player_width, self.player_height, 10)
+    pyxel.blt(int(self.px), int(self.py), 0, 0, 0, 8, 8, 0)
 
     # Clear camera context matrix offsets to stick layout metrics cleanly on screen
     pyxel.camera(0, 0)
 
     gun_info = WEAPONS[self.current_gun]
     pyxel.text(4, 4, f"GUN: {gun_info['name']} (Q/E)", 7)
-    pyxel.text(4, 14, f"HP: {'❤️' * self.player_hp}", 8)
+
+    # Render mini-health heads
+    pyxel.text(4, 14, "HP:", 7)
+    for i in range(max(0, self.player_hp)):
+      pyxel.blt(18 + (i * 10), 13, 0, 0, 0, 8, 4, 0)
+
     pyxel.text(4, 24, "AUTO-AIM: [SHIFT]", 9 if self.is_auto_aiming else 5)
+
+    # Score Panels
     pyxel.text(100, 4, f"SCORE: {self.score}", 7)
+    pyxel.text(100, 14, f"BEST: {self.high_score}", 11) # Gold/Green color text
 
     if self.game_over:
-      pyxel.rect(30, 60, 100, 40, 0)
+      pyxel.rect(30, 60, 100, 42, 0)
       pyxel.text(62, 70, "WASTELAND DIED", 8)
-      pyxel.text(46, 85, "R to Respawn", 7)
+      if self.score >= self.high_score and self.score > 0:
+        pyxel.text(53, 80, "NEW HIGH SCORE!", 10)
+      pyxel.text(46, 92, "R to Respawn", 7)
+
