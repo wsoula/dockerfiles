@@ -49,7 +49,7 @@ class ShooterEngine:
   def __init__(self):
     # Setup persistent user data directory paths safely
     self.save_dir = pyxel.user_data_dir("Arcade", "Shooter")
-    self.save_file = os.path.join(self.save_dir, "shooter.save")
+    self.save_file = os.path.join(self.save_dir, "shooter.json")
     self.high_score = self.load_high_score()
 
     self.init_sprites()
