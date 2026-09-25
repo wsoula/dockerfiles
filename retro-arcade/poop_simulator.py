@@ -215,19 +215,54 @@ class PoopSimulator:
       self.update_shop()
 
   def update_lab(self):
+    # Enable the mouse cursor visibility context frame inside Pyxel
+    pyxel.mouse(True)
+
+    # 1. Existing Keyboard Navigation Controls
     if pyxel.btnp(pyxel.KEY_LEFT) or pyxel.btnp(pyxel.KEY_A):
       self.selector_index = (self.selector_index - 1) % 7
     elif pyxel.btnp(pyxel.KEY_RIGHT) or pyxel.btnp(pyxel.KEY_D):
       self.selector_index = (self.selector_index + 1) % 7
+
+    # Trigger action if Keyboard Enter/Space is hit
     if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
-      if self.selector_index < 5:
-        item = self.unlocked_items[self.selector_index]
-        if item["unlocked"]: self.mixture_mask ^= item["bit"]
-      elif self.selector_index == 5:
-        if self.mixture_mask > 0: self.trigger_brew()
-      elif self.selector_index == 6:
-        self.state = STATE_SHOP
-        self.selector_index = 0
+      self.execute_selection()
+
+    # 2. TOUCH / MOUSE CLICK CONTROLS
+    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+      mx, my = pyxel.mouse_x, pyxel.mouse_y
+
+      # Check if tap is on any of the 5 Ingredient Slots (Y bounds: 96-111) but not the flush button
+      if 96 <= my <= 111 and not 114<= mx <= 154:
+        for i in range(5):
+          x_pos = 6 + (i * 21)
+          if x_pos <= mx <= x_pos + 15:
+            self.selector_index = i
+            self.execute_selection()
+
+      # Check if tap is on the FLUSH Button (X: 114-154, Y: 96-111)
+      elif 114 <= mx <= 154 and 96 <= my <= 111:
+        self.selector_index = 5
+        self.execute_selection()
+
+      # Check if tap is on the MARKET Button (X: 114-154, Y: 114-125)
+      elif 114 <= mx <= 154 and 114 <= my <= 125:
+        self.selector_index = 6
+        self.execute_selection()
+
+  def execute_selection(self):
+    """Isolates the actual activation mechanics so both keys and taps trigger identical code."""
+    if self.selector_index < 5:
+      item = self.unlocked_items[self.selector_index]
+      if item["unlocked"]:
+        self.mixture_mask ^= item["bit"]
+    elif self.selector_index == 5:
+      if self.mixture_mask > 0:
+        self.trigger_brew()
+    elif self.selector_index == 6:
+      self.state = STATE_SHOP
+      self.selector_index = 0
+
 
   def update_shop(self):
     locked_items = [i for i in self.unlocked_items if not i["unlocked"]]
