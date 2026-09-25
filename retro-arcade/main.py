@@ -4,6 +4,7 @@ from snake import SnakeEngine
 from hangman import HangmanEngine
 from platformer import PlatformerEngine
 from shooter import ShooterEngine
+from poop_simulator import PoopSimulator
 
 SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 160
@@ -13,6 +14,7 @@ SNAKE = 1
 HANGMAN = 2
 PLATFORMER = 3
 SHOOTER = 4
+POOP_SIM = 5
 
 class ArcadeApp:
   def __init__(self):
@@ -25,12 +27,13 @@ class ArcadeApp:
     self.hangman_game = HangmanEngine()
     self.platformer_game = PlatformerEngine()
     self.shooter_game = ShooterEngine()
+    self.poop_sim_game = PoopSimulator()
 
     pyxel.run(self.update, self.draw)
 
   def update(self):
     """ update """
-    modulo = 4
+    modulo = 5
     if self.current_state == MENU:
       if pyxel.btnp(pyxel.KEY_UP) or pyxel.btnp(pyxel.KEY_W):
         self.menu_selection = (self.menu_selection - 1) % modulo
@@ -50,6 +53,9 @@ class ArcadeApp:
         elif self.menu_selection == 3:
           self.shooter_game.reset()
           self.current_state = SHOOTER
+        elif self.menu_selection == 4:
+          self.poop_sim_game.reset()
+          self.current_state = POOP_SIM
 
     else:
       # Let 'M' return to menu from either game
@@ -66,6 +72,8 @@ class ArcadeApp:
         self.platformer_game.update()
       elif self.current_state == SHOOTER:
         self.shooter_game.update()
+      elif self.current_state == POOP_SIM:
+        self.poop_sim_game.update()
 
   def draw(self):
     pyxel.cls(0)
@@ -76,10 +84,12 @@ class ArcadeApp:
       col2 = 11 if self.menu_selection == 1 else 7
       col3 = 11 if self.menu_selection == 2 else 7
       col4 = 11 if self.menu_selection == 3 else 7
-      pyxel.text(35, 50, f"{'> ' if self.menu_selection == 0 else '  '}1. PLAY SNAKE", col1)
-      pyxel.text(35, 70, f"{'> ' if self.menu_selection == 1 else '  '}2. PLAY HANGMAN", col2)
-      pyxel.text(35, 90, f'{"> " if self.menu_selection == 2 else " "}3. PLAY SUPER MARIO RUN', col3)
-      pyxel.text(35, 110, f'{"> " if self.menu_selection == 4 else " "}4. PLAY ENDLESS SHOOTER', col4)
+      col5 = 11 if self.menu_selection == 4 else 7
+      pyxel.text(30, 40, f"{'> ' if self.menu_selection == 0 else '  '}1. PLAY SNAKE", col1)
+      pyxel.text(30, 60, f"{'> ' if self.menu_selection == 1 else '  '}2. PLAY HANGMAN", col2)
+      pyxel.text(30, 80, f'{"> " if self.menu_selection == 2 else " "}3. PLAY SUPER MARIO RUN', col3)
+      pyxel.text(30, 100, f'{"> " if self.menu_selection == 3 else " "}4. PLAY ENDLESS SHOOTER', col4)
+      pyxel.text(30, 120, f'{"> " if self.menu_selection == 4 else " "}5. PLAY POOP SIMULATOR', col5)
       pyxel.text(25, 130, "Press Enter to Select", 5)
     else:
       # Render active state view frames & menu bar anchor
@@ -92,6 +102,8 @@ class ArcadeApp:
         self.platformer_game.draw()
       elif self.current_state == SHOOTER:
         self.shooter_game.draw()
+      elif self.current_state == POOP_SIM:
+        self.poop_sim_game.draw()
 
 if __name__ == "__main__":
   ArcadeApp()

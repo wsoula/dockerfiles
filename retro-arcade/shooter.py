@@ -49,33 +49,48 @@ class ShooterEngine:
   def __init__(self):
     # Setup persistent user data directory paths safely
     self.save_dir = pyxel.user_data_dir("Arcade", "Shooter")
-    self.save_file = os.path.join(self.save_dir, "save.json")
+    self.save_file = os.path.join(self.save_dir, "shooter.save")
     self.high_score = self.load_high_score()
 
     self.init_sprites()
     self.reset()
 
   def load_high_score(self):
-    """Loads high score from local file storage profile folder."""
+    """Fetches the persistent high score via network sync bridge synchronously."""
     try:
-      if os.path.exists(self.save_file):
-        with open(self.save_file, "r") as f:
-          data = json.load(f)
-          return data.get("high_score", 0)
+      import pyodide.http
+      # Synchronously fetch from the endpoint
+      response = pyodide.http.open_url("/load")
+      data = json.loads(response.read())
+      return data.get("high_score", 0)
     except:
-      pass
+      try:
+        if os.path.exists("data/shooter.json"):
+          with open("data/shooter.json", "r") as f:
+            return json.load(f).get("high_score", 0)
+      except: pass
     return 0
 
   def save_high_score(self):
-    """Saves high score out to storage media securely."""
+    """Pushes the score using a blocking synchronous request to prevent drops."""
+    payload = json.dumps({"high_score": self.high_score})
     try:
-      # Ensure data container directory tree paths exist safely
-      if not os.path.exists(self.save_dir):
-        os.makedirs(self.save_dir)
-      with open(self.save_file, "w") as f:
-        json.dump({"high_score": self.high_score}, f)
-    except:
-      pass
+      # Access WebAssembly global JS context layer
+      from js import XMLHttpRequest
+
+      # Instantiate a blocking synchronous connection channel
+      req = XMLHttpRequest.new()
+      req.open("POST", "/save", False)  # False forces the request to be synchronous
+      req.setRequestHeader("Content-Type", "application/json")
+      req.send(payload)
+    except Exception as e:
+      try:
+        if not os.path.exists("data"):
+          os.makedirs("data")
+        with open("data/shooter.json", "w") as f:
+          f.write(payload)
+      except: pass
+
 
   def init_sprites(self):
     p_data = [
